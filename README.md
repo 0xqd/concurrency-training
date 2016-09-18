@@ -232,8 +232,10 @@ Counter.next(counter)
 ```
 
 # Applying Concurrency
-- To find out which one is better or worse, I have modeled dining philosophers problem in different modeling including locking, STM, atom ( pretty much implicit lock ) and actor. What makes this problem interesting is we have a coordinated async problem, how ? 5 chopsticks, 5 people, at the same time we can have at most 2 eating (async) and each must have 2 chopsticks to dine ( coordinated ). So one can thinking about locking the whole table then each can dine, it's correct but it's not the way we do concurrency.
-- After observing the implementation, I conculde that Clojure has a very clear way on how to do concurrency, they have full utils to do async and coordinated concurrency. Both clojure and erlang implementations are lockless which is nice. Other implementation, you cannot avoid lock and in the case of coordinated concurrency you need to pay attention to global fixed order and the order on how you unlock your lock.
+- To find out which one is better or worse, I have modeled dining philosophers problem in different modeling including locking, STM, atom ( implicit lock ) and actor. What makes this problem interesting is we have a coordinated async problem, how ? 5 chopsticks, 5 people, at the same time we can have at most 2 eating (async) and each must have 2 chopsticks to dine ( coordinated ). So one can thinking about locking the whole table then each can dine, it's correct but it's not the way we do concurrency.
+- After observing the implementation, I conculde that
+  - Clojure has a very clear way on how to do concurrency, they have full utils to do async and coordinated concurrency.
+  - Both clojure and elixir (erlang) implementations are lockless which is nice. Other implementation, you cannot avoid lock and in the case of coordinated concurrency you need to pay attention to global fixed order and the order on how you unlock your lock, and it will get really nasty if you still use lock with more than 2 locks to do accordinated concurrency.
 
 # Tooling
 - Manage Thread pool :
