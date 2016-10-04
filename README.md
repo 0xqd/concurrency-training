@@ -248,3 +248,52 @@ Counter.next(counter)
 // How to write more about modeling current software around: Identity ( Global state changing over time ) and MapReduce ( action to produce something ). Most of the works in concurrency are about these two.
 // This note will be edited and changed over the time I read the book, so it might not correct, any feedback is appreciated.
 
+# CSP - Concurrency modeling tool
+- CSP a very old idea form Computer Science ( 1987 ) from Hoare.
+http://spinroot.com/courses/summer/Papers/hoare_1978.pdf
+"""
+In fact, any change of the internal state of a machine executing a program can be modeled as an assignment of a new value to some variable part of that machine. However, the operations of input and output, which affect the external environment of a machine, are
+not nearly so well understood. They are often added to a programming language only as an afterthought.
+""" - Hoare
+
+It helps modeling many concurrency problems with ease and it's the most simple modeling tool out there.
+
+## Implementation
+- We use go as one of the first language ( including Clojure ) implemented CSP.
+
+Async :
+```
+go func() { fmt.Printf("Async op") }
+```
+
+synchronous:
+```
+c := make(chan int)
+// run the "expensive" function
+go func() {
+  time.Sleep(time.Milliseconds * 1000)
+  c <- 10
+}
+fmt.Println("Do something in between")
+
+// wait here until we get the value
+val := <- c
+fmt.Println("Here you go %v", val)
+```
+
+coordinated:
+between channel, we use `sync.WaitGroup`
+in the same goroutine, you need to use lock.
+
+## Advanced example
+- Task/Await `async_await.go`
+- Coroutine  `coroutine.go`
+
+## Thoughts
+- CSP is only a modeling between different domains in your language using high level concurrency tool ( channel ).
+- It still needs lock to do coordinated concurrency.
+
+- Many system primitives like pipelines, map reduce, distributed primitives can be built easily with languages like Clojure, Go, Erlang.
+
+## More
+- Go Advanced Patterns: https://blog.golang.org/advanced-go-concurrency-patterns
